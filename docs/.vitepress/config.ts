@@ -5,6 +5,8 @@ export default defineConfig({
   description: 'A lightweight HTTP file server written in Zig',
   lang: 'en-US',
 
+  base: '/zserve/',
+
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]
   ],
