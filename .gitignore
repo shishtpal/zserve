@@ -1,0 +1,11 @@
+*.html
+*.css
+*.js
+*.wasm
+*.wasm.map
+*.exe
+*.exe.obj
+*.pdb
+
+.zig-cache/**/*
+zig-out/*

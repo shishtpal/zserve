@@ -1,0 +1,142 @@
+# Features
+
+## Static File Serving
+
+The server serves static files with automatic MIME type detection based on file extensions.
+
+### Supported MIME Types
+
+#### Text Formats
+
+| Extension | MIME Type |
+|-----------|-----------|
+| `.html`, `.htm` | `text/html; charset=utf-8` |
+| `.css` | `text/css` |
+| `.js` | `application/javascript` |
+| `.txt` | `text/plain; charset=utf-8` |
+
+#### Image Formats
+
+| Extension | MIME Type |
+|-----------|-----------|
+| `.jpg`, `.jpeg` | `image/jpeg` |
+| `.png` | `image/png` |
+| `.gif` | `image/gif` |
+| `.webp` | `image/webp` |
+| `.avif` | `image/avif` |
+| `.svg` | `image/svg+xml` |
+
+#### Video Formats
+
+| Extension | MIME Type |
+|-----------|-----------|
+| `.mp4` | `video/mp4` |
+| `.webm` | `video/webm` |
+| `.mkv` | `video/x-matroska` |
+
+#### Audio Formats
+
+| Extension | MIME Type |
+|-----------|-----------|
+| `.mp3` | `audio/mpeg` |
+| `.wav` | `audio/wav` |
+| `.ogg` | `audio/ogg` |
+
+#### Documents
+
+| Extension | MIME Type |
+|-----------|-----------|
+| `.pdf` | `application/pdf` |
+| `.zip` | `application/zip` |
+
+Unknown file types are served as `application/octet-stream`.
+
+## Directory Listings
+
+When accessing a directory path, the server generates an HTML listing with:
+
+- **File/folder names** - Clickable links for navigation
+- **File sizes** - Human-readable format (B, KB, MB, GB)
+- **Parent directory link** - `..` for navigation
+- **Sorted output** - Directories first, then alphabetically
+
+### Example Output
+
+```html
+<h1>Directory listing: /project</h1>
+<ul>
+  <li><a href=".." class="directory">..</a><span class="size">-</span></li>
+  <li><a href="/src" class="directory">src/</a><span class="size">-</span></li>
+  <li><a href="/README.md" class="file">README.md</a><span class="size">2.5 KB</span></li>
+</ul>
+```
+
+## Range Requests
+
+The server supports HTTP Range requests for partial content delivery, enabling:
+
+- **Video streaming** - Seek support in video players
+- **Audio streaming** - Play audio files without downloading
+- **Resumable downloads** - Resume interrupted downloads
+- **Bandwidth efficiency** - Stream only needed portions
+
+### Usage Example
+
+Request:
+```http
+GET /video.mp4 HTTP/1.1
+Host: localhost:8080
+Range: bytes=0-1023
+```
+
+Response:
+```http
+HTTP/1.1 206 Partial Content
+Content-Type: video/mp4
+Content-Length: 1024
+Content-Range: bytes 0-1023/10485760
+Accept-Ranges: bytes
+
+[binary data]
+```
+
+## HTTP Methods
+
+| Method | Support |
+|--------|---------|
+| `GET` | ✅ Full support |
+| `HEAD` | ✅ Full support |
+| `POST` | ❌ Not supported |
+| `PUT` | ❌ Not supported |
+| `DELETE` | ❌ Not supported |
+
+## Logging
+
+Requests are logged to stdout in a simple format:
+
+```
+[2026-02-17 15:30:45] GET /index.html 200
+[2026-02-17 15:30:46] GET /style.css 200
+[2026-02-17 15:30:47] GET /notfound.html 404
+```
+
+## Response Headers
+
+The server includes these headers in responses:
+
+| Header | Description |
+|--------|-------------|
+| `Content-Type` | MIME type of the content |
+| `Content-Length` | Size in bytes |
+| `Accept-Ranges` | Indicates range request support |
+| `Content-Disposition` | Filename for downloads |
+
+### Example Response
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 1234
+Accept-Ranges: bytes
+Content-Disposition: inline; filename="index.html"
+```
