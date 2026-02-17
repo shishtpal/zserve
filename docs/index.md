@@ -41,7 +41,7 @@ zig build
 ./zig-out/bin/zserve --root . --port 8080
 ```
 
-Open http://localhost:8080 in your browser.
+Open your browser to `http://localhost:8080`.
 
 ## Why Local Server?
 

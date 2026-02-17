@@ -76,7 +76,7 @@ server {
 
 ### Caddy
 
-```caddyfile
+```text
 files.example.com {
     reverse_proxy localhost:8080
     
